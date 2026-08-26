@@ -1,0 +1,172 @@
+[gd_scene format=3 uid="uid://d1vhyukum5t2a"]
+
+[ext_resource type="Script" uid="uid://c2kkj7vhsd1oi" path="res://addons/cogito/SceneManagement/cogito_scene.gd" id="1_scene"]
+[ext_resource type="Script" uid="uid://6010ovanwkwo" path="res://addons/cogito/Scripts/scene_transition_zone.gd" id="2_zone"]
+[ext_resource type="Script" uid="uid://di15gqemrkk0x" path="res://addons/cogito/InventoryPD/CustomResources/InventorySlotPD.gd" id="3_f6364"]
+[ext_resource type="PackedScene" uid="uid://kicjwmh02uwf" path="res://addons/cogito/PackedScenes/cogito_player.tscn" id="3_player"]
+[ext_resource type="Script" uid="uid://btnha2whsheir" path="res://addons/cogito/InventoryPD/cogito_inventory.gd" id="4_0q6de"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_default"]
+sky_top_color = Color(0.3, 0.35, 0.5, 1)
+sky_horizon_color = Color(0.55, 0.5, 0.45, 1)
+ground_bottom_color = Color(0.15, 0.12, 0.1, 1)
+ground_horizon_color = Color(0.35, 0.3, 0.25, 1)
+
+[sub_resource type="Sky" id="Sky_default"]
+sky_material = SubResource("ProceduralSkyMaterial_default")
+
+[sub_resource type="Environment" id="Environment_default"]
+background_mode = 2
+sky = SubResource("Sky_default")
+ambient_light_color = Color(0.38, 0.35, 0.33, 1)
+ambient_light_energy = 0.6
+
+[sub_resource type="Resource" id="Resource_nl4vj"]
+resource_local_to_scene = true
+script = ExtResource("4_0q6de")
+grid = true
+inventory_size = Vector2i(6, 3)
+inventory_slots = Array[ExtResource("3_f6364")]([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundary_floor"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+size = Vector3(12, 0.3, 12)
+
+[sub_resource type="StandardMaterial3D" id="Material_gray"]
+albedo_color = Color(0.35, 0.35, 0.35, 1)
+roughness = 0.8
+
+[sub_resource type="BoxShape3D" id="BoxShape_wall_ns"]
+size = Vector3(12, 4, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall_ns"]
+size = Vector3(12, 4, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="Material_warm_wall"]
+albedo_color = Color(0.55, 0.4, 0.3, 1)
+roughness = 0.7
+
+[sub_resource type="BoxShape3D" id="BoxShape_wall_ew"]
+size = Vector3(0.3, 4, 12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall_ew"]
+size = Vector3(0.3, 4, 12)
+
+[sub_resource type="SphereMesh" id="SphereMesh_indicator"]
+
+[sub_resource type="StandardMaterial3D" id="Material_blue"]
+albedo_color = Color(0.2, 0.3, 0.85, 1)
+roughness = 0.7
+
+[sub_resource type="BoxShape3D" id="BoxShape_portal"]
+size = Vector3(2, 3, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_portal"]
+size = Vector3(2, 3, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="Material_green"]
+albedo_color = Color(0.2, 0.8, 0.3, 1)
+roughness = 0.5
+emission_enabled = true
+emission = Color(0.1, 0.5, 0.1, 1)
+
+[node name="CogitoLevelB" type="Node3D" unique_id=666996121 node_paths=PackedStringArray("connectors")]
+script = ExtResource("1_scene")
+connectors = [NodePath("Connectors/spawn_b")]
+save_temp_on_enter = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=728009542]
+environment = SubResource("Environment_default")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1930453343]
+transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 8, 0)
+light_color = Color(1, 0.9, 0.8, 1)
+light_energy = 1.2
+shadow_enabled = true
+
+[node name="Connectors" type="Node3D" parent="." unique_id=581793887]
+
+[node name="spawn_b" type="Marker3D" parent="Connectors" unique_id=560043769]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, -3)
+
+[node name="CogitoPlayer" parent="." unique_id=777592440 instance=ExtResource("3_player")]
+inventory_data = SubResource("Resource_nl4vj")
+INVERT_Y_AXIS = false
+
+[node name="LevelGeometry" type="Node3D" parent="." unique_id=1624938789]
+
+[node name="Floor" type="StaticBody3D" parent="LevelGeometry" unique_id=202658367]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelGeometry/Floor" unique_id=2007533435]
+shape = SubResource("WorldBoundary_floor")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LevelGeometry/Floor" unique_id=908635154]
+mesh = SubResource("BoxMesh_floor")
+surface_material_override/0 = SubResource("Material_gray")
+
+[node name="Wall_North" type="StaticBody3D" parent="LevelGeometry" unique_id=1519197220]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelGeometry/Wall_North" unique_id=2093387933]
+shape = SubResource("BoxShape_wall_ns")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LevelGeometry/Wall_North" unique_id=1902306346]
+mesh = SubResource("BoxMesh_wall_ns")
+surface_material_override/0 = SubResource("Material_warm_wall")
+
+[node name="Wall_South" type="StaticBody3D" parent="LevelGeometry" unique_id=148247284]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelGeometry/Wall_South" unique_id=592166775]
+shape = SubResource("BoxShape_wall_ns")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LevelGeometry/Wall_South" unique_id=8117755]
+mesh = SubResource("BoxMesh_wall_ns")
+surface_material_override/0 = SubResource("Material_warm_wall")
+
+[node name="Wall_East" type="StaticBody3D" parent="LevelGeometry" unique_id=1088265395]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 2, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelGeometry/Wall_East" unique_id=1326409950]
+shape = SubResource("BoxShape_wall_ew")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LevelGeometry/Wall_East" unique_id=753316865]
+mesh = SubResource("BoxMesh_wall_ew")
+surface_material_override/0 = SubResource("Material_warm_wall")
+
+[node name="Wall_West" type="StaticBody3D" parent="LevelGeometry" unique_id=67844599]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 2, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelGeometry/Wall_West" unique_id=1976917518]
+shape = SubResource("BoxShape_wall_ew")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LevelGeometry/Wall_West" unique_id=789879535]
+mesh = SubResource("BoxMesh_wall_ew")
+surface_material_override/0 = SubResource("Material_warm_wall")
+
+[node name="RoomIndicator" type="MeshInstance3D" parent="LevelGeometry" unique_id=1882669258]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2.5, 0)
+mesh = SubResource("SphereMesh_indicator")
+surface_material_override/0 = SubResource("Material_blue")
+
+[node name="PortalToA" type="Area3D" parent="." unique_id=412254502]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 1.5, 4)
+script = ExtResource("2_zone")
+target_scene_path = "res://demos/cogito_levels/cogito_level_a.tscn"
+target_connector = "spawn_a"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PortalToA" unique_id=1324026199]
+shape = SubResource("BoxShape_portal")
+
+[node name="PortalVisual" type="MeshInstance3D" parent="PortalToA" unique_id=1257278211]
+mesh = SubResource("BoxMesh_portal")
+surface_material_override/0 = SubResource("Material_green")
+
+[node name="Label3D" type="Label3D" parent="PortalToA" unique_id=1875580547]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+billboard = 1
+modulate = Color(0.2, 1, 0.3, 1)
+text = "← Nivel A"
+font_size = 48

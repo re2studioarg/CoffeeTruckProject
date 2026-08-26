@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://d1vhyukum5t17"]
+
+[ext_resource type="Script" uid="uid://ddtk2lbyjwgcd" path="res://demos/framework_demo.gd" id="1_demo"]
+[ext_resource type="Script" uid="uid://t82sojcbv2me" path="res://gameplay/inventory/inventory_component.gd" id="2_inventory"]
+[ext_resource type="Script" uid="uid://oe1c3xeytu1d" path="res://gameplay/dialogue/dialogue_player.gd" id="3_dialogue"]
+
+[node name="FrameworkDemo" type="Control" unique_id=1863699270]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_demo")
+
+[node name="Systems" type="Node" parent="." unique_id=1802958970]
+
+[node name="Inventory" type="Node" parent="Systems" unique_id=146014689]
+script = ExtResource("2_inventory")
+capacity = 10
+
+[node name="DialoguePlayer" type="Node" parent="Systems" unique_id=1119749267]
+script = ExtResource("3_dialogue")

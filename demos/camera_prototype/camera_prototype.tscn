@@ -1,0 +1,221 @@
+[gd_scene format=3 uid="uid://c7l050ne1vefu"]
+
+[ext_resource type="Script" uid="uid://beanx5mehua3y" path="res://core/camera/camera_rig.gd" id="1_camera_rig"]
+[ext_resource type="Script" uid="uid://bhm0ufjocxnj" path="res://core/camera/truck_wall.gd" id="2_truck_wall"]
+
+[sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
+sky_top_color = Color(0.78, 0.88, 1, 1)
+sky_horizon_color = Color(0.82, 0.88, 0.95, 1)
+ground_bottom_color = Color(0.55, 0.6, 0.5, 1)
+ground_horizon_color = Color(0.75, 0.8, 0.7, 1)
+
+[sub_resource type="Sky" id="sky"]
+sky_material = SubResource("sky_mat")
+
+[sub_resource type="Environment" id="env"]
+background_mode = 2
+sky = SubResource("sky")
+ambient_light_source = 3
+ambient_light_color = Color(1, 0.98, 0.94, 1)
+ambient_light_energy = 0.4
+ssao_enabled = true
+ssao_radius = 0.5
+ssao_intensity = 1.5
+ssao_light_affect = 0.3
+
+[sub_resource type="BoxMesh" id="box_floor"]
+size = Vector3(2.6, 0.15, 5)
+
+[sub_resource type="StandardMaterial3D" id="mat_ground"]
+albedo_color = Color(0.42, 0.58, 0.35, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="mat_floor"]
+albedo_color = Color(0.25, 0.23, 0.22, 1)
+roughness = 0.65
+
+[sub_resource type="BoxMesh" id="box_wall_side"]
+size = Vector3(0.12, 2.4, 5)
+
+[sub_resource type="StandardMaterial3D" id="mat_wall"]
+albedo_color = Color(0.91, 0.835, 0.718, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="box_wall_back"]
+size = Vector3(2.6, 2.4, 0.12)
+
+[sub_resource type="BoxMesh" id="box_counter"]
+size = Vector3(0.55, 0.9, 2)
+
+[sub_resource type="StandardMaterial3D" id="mat_counter"]
+albedo_color = Color(0.545, 0.412, 0.078, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="box_small"]
+size = Vector3(0.3, 0.35, 0.25)
+
+[sub_resource type="StandardMaterial3D" id="mat_machine"]
+albedo_color = Color(0.7, 0.7, 0.7, 1)
+metallic = 0.6
+roughness = 0.25
+
+[sub_resource type="CylinderMesh" id="cyl_medium"]
+top_radius = 0.18
+bottom_radius = 0.18
+height = 0.5
+
+[sub_resource type="StandardMaterial3D" id="mat_dark_metal"]
+albedo_color = Color(0.25, 0.22, 0.2, 1)
+metallic = 0.7
+roughness = 0.3
+
+[sub_resource type="CylinderMesh" id="cyl_small"]
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.3
+
+[sub_resource type="StandardMaterial3D" id="mat_accent"]
+albedo_color = Color(0.85, 0.28, 0.2, 1)
+metallic = 0.1
+roughness = 0.4
+
+[node name="CameraPrototype" type="Node3D" unique_id=1774524792]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1928323068]
+environment = SubResource("env")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=570937793]
+transform = Transform3D(0.866, -0.35, 0.354, 0, 0.707, 0.707, -0.5, -0.606, 0.612, 0, 0, 0)
+light_energy = 1.2
+shadow_enabled = true
+shadow_bias = 0.02
+shadow_normal_bias = 0.5
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=1527118905]
+script = ExtResource("1_camera_rig")
+tilt_angle = 58.0
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=2108572885]
+transform = Transform3D(1, 0, 0, 0, 0.5299, 0.848, 0, -0.848, 0.5299, 0, 5.8, 6.5)
+projection = 1
+size = 7.0
+far = 100.0
+
+[node name="GroundPlane" type="MeshInstance3D" parent="." unique_id=1027972292]
+transform = Transform3D(8, 0, 0, 0, 0.1, 0, 0, 0, 8, 0, -0.05, 0)
+mesh = SubResource("box_floor")
+surface_material_override/0 = SubResource("mat_ground")
+
+[node name="FoodTruck" type="Node3D" parent="." unique_id=2018504610]
+
+[node name="Floor" type="MeshInstance3D" parent="FoodTruck" unique_id=2055936645]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.075, 0)
+mesh = SubResource("box_floor")
+surface_material_override/0 = SubResource("mat_floor")
+
+[node name="Wall_Left" type="MeshInstance3D" parent="FoodTruck" unique_id=1669447229]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.24, 1.2, 0)
+mesh = SubResource("box_wall_side")
+surface_material_override/0 = SubResource("mat_wall")
+script = ExtResource("2_truck_wall")
+outward_normal = Vector3(-1, 0, 0)
+
+[node name="Wall_Right" type="MeshInstance3D" parent="FoodTruck" unique_id=1227498288]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.24, 1.2, 0)
+mesh = SubResource("box_wall_side")
+surface_material_override/0 = SubResource("mat_wall")
+script = ExtResource("2_truck_wall")
+
+[node name="Wall_Back" type="MeshInstance3D" parent="FoodTruck" unique_id=697127249]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -2.44)
+mesh = SubResource("box_wall_back")
+surface_material_override/0 = SubResource("mat_wall")
+script = ExtResource("2_truck_wall")
+outward_normal = Vector3(0, 0, -1)
+can_be_hidden = false
+
+[node name="Wall_Front" type="MeshInstance3D" parent="FoodTruck" unique_id=1206116283]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 2.4557185)
+mesh = SubResource("box_wall_back")
+surface_material_override/0 = SubResource("mat_wall")
+script = ExtResource("2_truck_wall")
+outward_normal = Vector3(0, 0, 1)
+can_be_hidden = false
+
+[node name="Counter_Left" type="MeshInstance3D" parent="FoodTruck" unique_id=190353458]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0.45, -0.5)
+mesh = SubResource("box_counter")
+surface_material_override/0 = SubResource("mat_counter")
+
+[node name="Counter_Back" type="MeshInstance3D" parent="FoodTruck" unique_id=464406961]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.45, -1.9)
+mesh = SubResource("box_counter")
+surface_material_override/0 = SubResource("mat_counter")
+
+[node name="EspressoMachine" type="Node3D" parent="FoodTruck" unique_id=1210787585]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 1.1, -2)
+
+[node name="Body" type="MeshInstance3D" parent="FoodTruck/EspressoMachine" unique_id=241608208]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+mesh = SubResource("box_small")
+surface_material_override/0 = SubResource("mat_machine")
+
+[node name="Boiler" type="MeshInstance3D" parent="FoodTruck/EspressoMachine" unique_id=179615370]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42, 0)
+mesh = SubResource("cyl_medium")
+surface_material_override/0 = SubResource("mat_dark_metal")
+
+[node name="GroupHead" type="MeshInstance3D" parent="FoodTruck/EspressoMachine" unique_id=17051029]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0.22, 0.1)
+mesh = SubResource("cyl_small")
+surface_material_override/0 = SubResource("mat_machine")
+
+[node name="Grinder" type="Node3D" parent="FoodTruck" unique_id=1909235378]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 1.05, -2)
+
+[node name="Base" type="MeshInstance3D" parent="FoodTruck/Grinder" unique_id=1434207240]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+mesh = SubResource("box_small")
+surface_material_override/0 = SubResource("mat_machine")
+
+[node name="Hopper" type="MeshInstance3D" parent="FoodTruck/Grinder" unique_id=2123523653]
+transform = Transform3D(0.7, 0, 0, 0, 1, 0, 0, 0, 0.7, 0, 0.32, 0)
+mesh = SubResource("cyl_medium")
+surface_material_override/0 = SubResource("mat_dark_metal")
+
+[node name="CashRegister" type="MeshInstance3D" parent="FoodTruck" unique_id=1375919435]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 1.05, 0.2)
+mesh = SubResource("box_small")
+surface_material_override/0 = SubResource("mat_accent")
+
+[node name="Sign" type="MeshInstance3D" parent="FoodTruck" unique_id=1717274425]
+transform = Transform3D(1.5, 0, 0, 0, 0.4, 0, 0, 0, 0.08, 0, 2.5, 0.2)
+mesh = SubResource("box_small")
+surface_material_override/0 = SubResource("mat_accent")
+
+[node name="Awning" type="MeshInstance3D" parent="FoodTruck" unique_id=60255559]
+transform = Transform3D(1.4, 0, 0, 0, 0.06, 0, 0, 0, 0.5, 0, 2.3, 0.3)
+mesh = SubResource("box_small")
+surface_material_override/0 = SubResource("mat_accent")
+
+[node name="Wheels" type="Node3D" parent="FoodTruck" unique_id=1546042110]
+
+[node name="Wheel_FL" type="MeshInstance3D" parent="FoodTruck/Wheels" unique_id=1649132341]
+transform = Transform3D(0, 0, 1, 1, 0, 0, 0, 1, 0, -1.5, 0.35, 1.8)
+mesh = SubResource("cyl_medium")
+surface_material_override/0 = SubResource("mat_dark_metal")
+
+[node name="Wheel_FR" type="MeshInstance3D" parent="FoodTruck/Wheels" unique_id=782825163]
+transform = Transform3D(0, 0, 1, 1, 0, 0, 0, 1, 0, 1.5, 0.35, 1.8)
+mesh = SubResource("cyl_medium")
+surface_material_override/0 = SubResource("mat_dark_metal")
+
+[node name="Wheel_RL" type="MeshInstance3D" parent="FoodTruck/Wheels" unique_id=1526200865]
+transform = Transform3D(0, 0, 1, 1, 0, 0, 0, 1, 0, -1.5, 0.35, -1.8)
+mesh = SubResource("cyl_medium")
+surface_material_override/0 = SubResource("mat_dark_metal")
+
+[node name="Wheel_RR" type="MeshInstance3D" parent="FoodTruck/Wheels" unique_id=2101500757]
+transform = Transform3D(0, 0, 1, 1, 0, 0, 0, 1, 0, 1.5, 0.35, -1.8)
+mesh = SubResource("cyl_medium")
+surface_material_override/0 = SubResource("mat_dark_metal")
